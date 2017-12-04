@@ -25,8 +25,13 @@ public class IndexController {
      * @Date: 2017/11/30
      * @Time: 11:33
      */
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "login";
+    }
+
+    @RequestMapping(value = "/fileupload", method = RequestMethod.GET)
+    public String upload_page() {
+        return "fileupload";
     }
 }

@@ -33,7 +33,7 @@ public class DruidConfiguration {
         //设置ip白名单
         servletRegistrationBean.addInitParameter("allow","127.0.0.1");
         //设置ip黑名单，如果allow和deny共同存在时，deny优先于allow
-        servletRegistrationBean.addInitParameter("deny","292.168.39.88");
+        servletRegistrationBean.addInitParameter("deny","192.168.39.88");
         //设置控制台管理用户
         servletRegistrationBean.addInitParameter("loginUsername","druid");
         servletRegistrationBean.addInitParameter("loginPassword","123456");
@@ -47,7 +47,7 @@ public class DruidConfiguration {
         //创建过滤器
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(new WebStatFilter());
         //设置过滤器过滤路径
-        filterRegistrationBean.addUrlPatterns("/*");
+        filterRegistrationBean.addUrlPatterns("/**");
         //忽略过滤的形式
         filterRegistrationBean.addInitParameter("exclusions",".js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
         return filterRegistrationBean;

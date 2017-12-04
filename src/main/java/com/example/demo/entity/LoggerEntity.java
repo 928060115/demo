@@ -52,6 +52,10 @@ public class LoggerEntity implements Serializable {
     //接口返回状态码
     @Column(name = "ali_http_status_code")
     private String statusCode;
+    //请求时间差
+    @Column(name = "ali_time_consuming")
+    private int timeConsuming;
+
 
     public Long getId() {
         return id;
@@ -136,8 +140,15 @@ public class LoggerEntity implements Serializable {
     public String getStatusCode() {
         return statusCode;
     }
-
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
+    }
+
+    public int getTimeConsuming() {
+        return timeConsuming;
+    }
+
+    public void setTimeConsuming(int timeConsuming) {
+        this.timeConsuming = timeConsuming;
     }
 }

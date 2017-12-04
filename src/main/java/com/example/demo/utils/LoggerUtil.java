@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
  * @Time: 18:01
  */
 public final class LoggerUtil {
-    private static final String LOGGER_RETURN = "_logger_return";
+    public static final String LOGGER_RETURN = "_logger_return";
+
     private LoggerUtil(){};
 
     /**

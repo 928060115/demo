@@ -4,6 +4,7 @@ import ch.qos.logback.classic.util.LoggerNameUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.example.demo.entity.LoggerEntity;
+import com.example.demo.jpa.LoggerJPA;
 import com.example.demo.utils.LoggerUtil;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -27,6 +28,13 @@ public class LoggerInterceptor implements HandlerInterceptor {
     //请求日志实体标识
     private static final String LOGGER_ENTITY = "_logger_entity";
 
+    /**
+     * @Author: rogue
+     * @Description: 根据传入的类型获取spring管理的对应的DAO
+     * @ClassName: LoggerInterceptor
+     * @Date: 2017/12/1
+     * @Time: 10:41
+     */
     private <T> T getDAO(Class<T> clazz, HttpServletRequest request){
         BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
         return factory.getBean(clazz);
@@ -83,7 +91,20 @@ public class LoggerInterceptor implements HandlerInterceptor {
         long currentTime = System.currentTimeMillis();
         //请求开始时间
         long time = Long.valueOf(httpServletRequest.getAttribute(LOGGER_SEND_TIME).toString());
-        //获取本次
-
+        //获取本次请求日志实体
+        LoggerEntity loggerEntity = (LoggerEntity) httpServletRequest.getAttribute(LOGGER_ENTITY);
+        //设置请求时间差
+        loggerEntity.setTimeConsuming(Integer.valueOf((currentTime-time)+""));
+        //设置返回时间
+        loggerEntity.setReturnTime(currentTime+"");
+        //设置返回码
+        loggerEntity.setStatusCode(status+"");
+        //设置返回值
+        loggerEntity.setReturnData(JSON.toJSONString(httpServletRequest.getAttribute(LoggerUtil.LOGGER_RETURN),
+                SerializerFeature.WriteMapNullValue,
+                SerializerFeature.DisableCircularReferenceDetect));
+        //执行将日志写入数据库
+        LoggerJPA loggerDAO = getDAO(LoggerJPA.class,httpServletRequest);
+        loggerDAO.save(loggerEntity);
     }
 }

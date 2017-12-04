@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
@@ -66,6 +67,19 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SessionInterceptor()).addPathPatterns("/*");
+        registry.addInterceptor(new SessionInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new LoggerInterceptor()).addPathPatterns("/**");
+    }
+
+    /**
+     * @Author: rogue
+     * @Description: 自定义静态文件路径
+     * @ClassName: WebMvcConfiguration
+     * @Date: 2017/12/1
+     * @Time: 13:27
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/demo/resources/**").addResourceLocations("classpath:/static/");
     }
 }

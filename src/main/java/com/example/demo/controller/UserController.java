@@ -61,6 +61,7 @@ public class UserController {
      * @Date: 2017/11/29
      * @Time: 15:52
      */
+
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public List<UserEntity> delete(Integer id) {
         userJPA.delete(id.longValue());
