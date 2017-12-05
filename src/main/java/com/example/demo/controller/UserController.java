@@ -2,7 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserEntity;
 import com.example.demo.jpa.UserJPA;
+import com.example.demo.utils.LoggerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,6 +69,57 @@ public class UserController {
     public List<UserEntity> delete(Integer id) {
         userJPA.delete(id.longValue());
         return userJPA.findAll();
+    }
+
+
+    /**
+     * @Author: rogue
+     * @Description: 自定义数据库查询语句测试
+     * @ClassName: UserController
+     * @Date: 2017/12/5
+     * @Time: 14:17
+     */
+    @RequestMapping(value = "/getUserBySex",method = RequestMethod.GET)
+    public List<UserEntity> getUserBySex(int sex,HttpServletRequest request){
+        request.setAttribute(LoggerUtil.LOGGER_RETURN,userJPA.nativeQuery(sex));
+        return userJPA.nativeQuery(sex);
+    }
+
+    /**
+     * @Author: rogue
+     * @Description: 自定义数据库删除语句测试
+     * @ClassName: UserController
+     * @Date: 2017/12/5
+     * @Time: 14:20
+     */
+    
+    @RequestMapping(value = "/deleteByUsername",method = RequestMethod.GET)
+    public String deleteByUsername(UserEntity userEntity){
+        userJPA.deleteByUsername(userEntity.getUsername(),userEntity.getPassword());
+        return "删除用户信息成功";
+    }
+
+    /**
+     * @Author: rogue
+     * @Description: 测试分页查询
+     * @ClassName: UserController
+     * @Date: 2017/12/5
+     * @Time: 14:54
+     */
+    @RequestMapping(value = "/cutPage",method = RequestMethod.GET)
+    public List<UserEntity> cutPage(int pageNo,int pageSize){
+        UserEntity user = new UserEntity();
+//        user.setSort("asc");
+        user.setPageNo(pageNo);
+        user.setPageSize(pageSize);
+        //获取排序对象
+        Sort.Direction sort_direction = Sort.Direction.ASC.toString().equalsIgnoreCase(user.getSort())?Sort.Direction.ASC:Sort.Direction.DESC;
+        //设置排序对象参数
+        Sort sort = new Sort(sort_direction,user.getSidx());
+        //创建分页对象
+        PageRequest pageRequest = new PageRequest(user.getPageNo()-1,user.getPageSize(),sort);
+        //执行分页查询
+        return userJPA.findAll(pageRequest).getContent();
     }
 
     /**

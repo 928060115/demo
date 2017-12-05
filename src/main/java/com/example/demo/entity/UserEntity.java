@@ -1,12 +1,14 @@
 package com.example.demo.entity;
 
+import com.example.demo.base.BaseEntity;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "user")
-public class UserEntity implements Serializable {
+public class UserEntity extends BaseEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
