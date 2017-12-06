@@ -4,9 +4,13 @@ import com.example.demo.entity.UserEntity;
 import com.example.demo.jpa.UserJPA;
 import com.example.demo.utils.LoggerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +21,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @Author: rogue
@@ -32,6 +38,28 @@ public class UserController {
 
     @Autowired
     private UserJPA userJPA;
+
+    @Autowired
+    private MessageSource messageSource;
+
+    public String validator(@Valid UserEntity userEntity, BindingResult result){
+        if (!result.hasErrors()) {
+            return "验证通过，"+"名称："+userEntity.getUsername()+",密码："+userEntity.getPassword();
+        }
+        StringBuffer msg = new StringBuffer();
+        //获取错误字段集合
+        List<FieldError> fieldErrors = result.getFieldErrors();
+        //获取本地locale，zh_CN
+        Locale currentLocale = LocaleContextHolder.getLocale();
+        //遍历错误字段获取错误信息
+        for (FieldError fieldError : fieldErrors){
+            //获取错误信息
+            String errorMsg = messageSource.getMessage(fieldError,currentLocale);
+            //添加到错误消息集合内
+            msg.append(fieldError.getField()+":"+errorMsg+",");
+        }
+        return msg.toString();
+    }
 
     /**
      * @Author: rogue
@@ -130,10 +158,10 @@ public class UserController {
      * @Time: 11:13
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(UserEntity user, HttpServletRequest request) {
+    public String login(@Valid UserEntity user,BindingResult bindingResult,HttpServletRequest request) {
         //登录成功
         boolean flag = true;
-        String result = "登录成功";
+        String result = validator(user,bindingResult);
         //根据用户名查询用户是否存在
         UserEntity userEntity = userJPA.findOne(new Specification<UserEntity>() {
             @Override

@@ -1,6 +1,9 @@
 package com.example.demo.entity;
 
 import com.example.demo.base.BaseEntity;
+import com.example.demo.validator.DefinedValidator;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,8 +16,12 @@ public class UserEntity extends BaseEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Length(min = 2,max = 10)
     private String username;
 
+    @NotBlank
+    @Length(min = 8,max = 20)
     private String password;
 
     @Column(name = "nick_name")
@@ -25,6 +32,7 @@ public class UserEntity extends BaseEntity implements Serializable{
     @Column(name = "register_date")
     private Date registerDate;
 
+    @NotBlank
     private String mobile;
 
     /**
