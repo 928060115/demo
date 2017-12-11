@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.jpa.UserJPA;
 import com.example.demo.utils.LoggerUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -68,6 +69,7 @@ public class UserController {
      * @Date: 2017/11/29
      * @Time: 15:47
      */
+    @ApiOperation(value = "用户列表",notes = "查询所有用户信息")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<UserEntity> list() {
         return userJPA.findAll();
@@ -157,6 +159,7 @@ public class UserController {
      * @Date: 2017/11/30
      * @Time: 11:13
      */
+    @ApiOperation(value = "用户登录",notes = "通过用户名密码登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@Valid UserEntity user,BindingResult bindingResult,HttpServletRequest request) {
         //登录成功
