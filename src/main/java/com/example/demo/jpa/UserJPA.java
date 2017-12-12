@@ -19,6 +19,9 @@ import java.util.List;
  */
 public interface UserJPA extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity>, Serializable {
 
+    //自定义查询
+    UserEntity findByUsername(String username);
+
     //自定义数据库查询语句
     //查询性别为男的user信息
     @Query(value = "select * from user where sex=?1" ,nativeQuery = true)

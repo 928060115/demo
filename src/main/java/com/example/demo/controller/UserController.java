@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserEntity;
 import com.example.demo.jpa.UserJPA;
+import com.example.demo.service.UserService;
 import com.example.demo.utils.LoggerUtil;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -10,13 +12,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -39,6 +40,9 @@ public class UserController {
 
     @Autowired
     private UserJPA userJPA;
+
+    @Resource
+    private UserService userService;
 
     @Autowired
     private MessageSource messageSource;
@@ -73,6 +77,12 @@ public class UserController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<UserEntity> list() {
         return userJPA.findAll();
+    }
+
+    @ApiOperation(value = "缓存获取用户列表信息",notes = "查询所有用户信息")
+    @RequestMapping(value = "/listForRedis",method = RequestMethod.GET)
+    public List<UserEntity> listForRedis(){
+        return userService.list();
     }
 
     /**
@@ -190,6 +200,41 @@ public class UserController {
             //将用户写进session
             request.getSession().setAttribute("_session_user",userEntity);
         }
+        return result;
+    }
+
+    @ApiOperation(value = "用户登录",notes = "通过用户名密码登录")
+    @ApiImplicitParam(name = "user",value = "用户的详细实体",required = true,dataType = "UserEntity")
+    @RequestMapping(value = "/login2", method = RequestMethod.POST)
+    public String login2(@RequestBody UserEntity user) {
+        //登录成功
+        boolean flag = true;
+        String result = "登录成功";
+        //根据用户名查询用户是否存在
+        UserEntity userEntity = userJPA.findOne(new Specification<UserEntity>() {
+            @Override
+            public Predicate toPredicate(Root<UserEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                criteriaQuery.where(criteriaBuilder.equal(root.get("username"), user.getUsername()));
+                return null;
+            }
+        });
+
+        //用户不存在
+        if (userEntity == null) {
+            flag = false;
+            result = "用户不存在，登录失败";
+        }
+        //密码错误
+        if (!userEntity.getPassword().equals(user.getPassword())) {
+            flag = false;
+            result = "用户密码错误，登录失败";
+        }
+
+        //登录成功
+        /*if (flag){
+            //将用户写进session
+            request.getSession().setAttribute("_session_user",userEntity);
+        }*/
         return result;
     }
 }
