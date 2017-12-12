@@ -40,7 +40,7 @@ public class UserEntity extends BaseEntity implements Serializable, UserDetails 
 
     private String mobile;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = {
@@ -50,7 +50,6 @@ public class UserEntity extends BaseEntity implements Serializable, UserDetails 
                     @JoinColumn(name = "ur_role_id")
             }
     )
-
     private List<RoleEntity> roles;
 
     public Long getId() {
