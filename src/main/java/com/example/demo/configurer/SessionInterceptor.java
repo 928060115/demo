@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if (httpServletRequest.getRequestURI().equals("/user/login") || httpServletRequest.getRequestURI().equals("/login") || !httpServletRequest.getRequestURI().contains("/user")) {
+        if (httpServletRequest.getRequestURI().equals("/user/login") ||httpServletRequest.getRequestURI().equals("/user/login2") || httpServletRequest.getRequestURI().equals("/login") || !httpServletRequest.getRequestURI().contains("/user")) {
             return true;
         }
         //验证session是否存在

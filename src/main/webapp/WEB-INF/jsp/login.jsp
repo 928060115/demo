@@ -5,10 +5,11 @@
 </head>
 <body>
     <form method="post" action="/user/login">
-        用户名：<input type="text" name="username"><br>
-        密码：<input type="password" name="password"><br>
-        手机号：<input type="number" name="mobile"><br>
-        flag：<input type="text" name="flag"><br>
+        <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
+        用户名：<input type="text" name="username" value="admin"><br>
+        密码：<input type="password" name="password" value="12345678"><br>
+        <%--手机号：<input type="number" name="mobile" value="185000000017"><br>
+        flag：<input type="text" name="flag" value="1"><br>--%>
         <input type="submit" value="登录">
     </form>
 </body>

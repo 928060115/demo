@@ -4,6 +4,6 @@
     <title>springboot支持jsp</title>
 </head>
 <body>
-    this is index jsp page.
+    终于成功了
 </body>
 </html>
