@@ -22,6 +22,8 @@ public class RoleEntity implements Serializable{
 
     @Column(name = "r_name")
     private String rname;
+    @Column(name = "r_flag")
+    private String rflag;
 
     public Long getId() {
         return id;
@@ -37,5 +39,13 @@ public class RoleEntity implements Serializable{
 
     public void setRname(String rname) {
         this.rname = rname;
+    }
+
+    public String getRflag() {
+        return rflag;
+    }
+
+    public void setRflag(String rflag) {
+        this.rflag = rflag;
     }
 }

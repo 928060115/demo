@@ -19,6 +19,11 @@ public class IndexController {
         return "index";
     }
 
+    @RequestMapping(value = "/main",method = RequestMethod.GET)
+    public String main(){
+        return "main";
+    }
+
     /**
      * @Author: rogue
      * @Description: 初始化登录页面

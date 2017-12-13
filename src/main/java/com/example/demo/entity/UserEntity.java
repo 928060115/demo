@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import com.example.demo.base.BaseEntity;
-import com.example.demo.validator.DefinedValidator;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class UserEntity extends BaseEntity implements Serializable, UserDetails {
+public class UserEntity extends BaseEntity implements Serializable, UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,17 +28,14 @@ public class UserEntity extends BaseEntity implements Serializable, UserDetails 
     @NotBlank
     @Length(min = 8, max = 20)
     private String password;
-
     @Column(name = "nick_name")
     private String nickName;
-
+    @Column(name = "sex")
     private Integer sex;
-
     @Column(name = "register_date")
     private Date registerDate;
-
+    @Column(name = "mobile")
     private String mobile;
-
     @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -124,28 +120,28 @@ public class UserEntity extends BaseEntity implements Serializable, UserDetails 
         List<GrantedAuthority> authorities = new ArrayList<>();
         List<RoleEntity> roles = getRoles();
         for (RoleEntity role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRname()));
+            authorities.add(new SimpleGrantedAuthority(role.getRflag()));
         }
         return authorities;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
