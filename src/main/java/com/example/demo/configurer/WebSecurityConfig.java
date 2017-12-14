@@ -30,21 +30,21 @@ import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //完成自定义实体注入
-    @Bean
-    UserDetailsService userService() {
-        return new UserService();
-    }
+//    //完成自定义实体注入
+//    @Bean
+//    UserDetailsService userService() {
+//        return new UserService();
+//    }
 
     //添加自定义的userService认证
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService());
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userService());
+//    }
 
     //自定义UserDetailsService注入
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private MyUserDetailsService myUserDetailsService;
     //配置匹配用户时密码规则
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -54,13 +54,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         //设置userDetailsService及密码规则
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     //排除/index路径拦截
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/index");
+        web.ignoring().antMatchers("/good/**");
     }
 
     @Override

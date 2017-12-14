@@ -2,11 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.UserEntity;
 import com.example.demo.jpa.UserJPA;
-import com.example.demo.service.TokenDetailService;
 import com.example.demo.service.UserService;
-import com.example.demo.service.impl.TokenDetailServiceImpl;
 import com.example.demo.utils.LoggerUtil;
-import com.example.demo.utils.TokenUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -203,8 +199,7 @@ public class UserController{
             //将用户写进session
             request.getSession().setAttribute("_session_user",userEntity);
         }
-        System.out.println(new TokenUtil().generateToken(new TokenDetailServiceImpl(user.getUsername())));
-        return new TokenUtil().generateToken(new TokenDetailServiceImpl(user.getUsername()));
+        return result;
     }
 
     @ApiOperation(value = "用户登录",notes = "通过用户名密码登录")

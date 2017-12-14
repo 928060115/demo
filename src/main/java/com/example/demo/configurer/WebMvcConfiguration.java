@@ -3,10 +3,12 @@ package com.example.demo.configurer;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.example.demo.interceptor.JwtTokenInterceptor;
+import com.example.demo.interceptor.LoggerInterceptor;
+import com.example.demo.interceptor.SessionInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -71,6 +73,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SessionInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new LoggerInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new JwtTokenInterceptor()).addPathPatterns("/api/**");
     }
 
     /**
