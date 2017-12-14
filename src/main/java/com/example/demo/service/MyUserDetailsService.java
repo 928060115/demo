@@ -23,7 +23,7 @@ import java.util.Collection;
  * @Date: 2017/12/13
  * @Time: 16:29
  */
-@Component("userDetailsService")
+@Component("myUserDetailsService")
 public class MyUserDetailsService implements UserDetailsService{
     @Autowired
     private UserOauthJPA userOauthJPA;
